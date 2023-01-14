@@ -6,17 +6,17 @@ To monitor EC2 windows virtual machine, specially the metrics which are not avai
 Once the metrics are available, generate a csv report for a particular day/ month and place them in an s3 bucket. 
 
 
-# Tool Selection
+## Tool Selection
 
 There are various tools available to do that and aws itself provides aws cloudwatch agent to pull the metrics and ingest them in cloudwatch.
 
 One specific requirement that the cloud watch does not fulfil is to get the disk utilization in GBs. I mean, it does give the disk utilization % but not the actual size of disk and the used size. 
-Due to this limitation, I ahve used one more open source tool called windows_exporter.
+Due to this limitation, I have used one more open source tool called windows_exporter.
 
 
 Based on our requirement, we can choose any of them.
 
-#  Hands-on 
+##  Hands-on 
 
 I have dividied this lab in two catagories.
 
@@ -30,25 +30,25 @@ In both the cases, we create a lambda function that will execute this python scr
 
 </br>
 
-# using cloudWatch agent and getting default metrics
+## Using cloudWatch agent and getting default metrics
 
 A list of all default metrics provided by cloudwatch agent can be found [here](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/metrics-collected-by-CloudWatch-agent.html). 
 
 
 Installing cloudwatch agent in windows server--
 
-1. Login to the Windows server and put the below URL in browser to download the package.. 
+1. Login to the Windows server and put the below URL in browser to download the package. 
 
 
         https://s3.amazonaws.com/amazoncloudwatch-agent/windows/amd64/latest/amazon-cloudwatch-agent.msi
 
 
-2. Once downlaoded, install it either by doublecliking on it ir using CMD/Powershell in admin mode.
+2. Once downloaded, install it either by double cliking on it or using CMD/Powershell in admin mode.
 
         msiexec /i amazon-cloudwatch-agent.msi
 
 
-3. Now its time to generate the config file. By default, Agent keeps the script files and config files at "C:\Program Files\Amazon\AmazonCloudWatchAgent". 
+3. Now it's time to generate the config file. By default, Agent keeps the script files and config files at "C:\Program Files\Amazon\AmazonCloudWatchAgent". 
 
     Go inside this folder and run below command from powershell to generate the config
 
@@ -100,7 +100,7 @@ Also, make sure to update the s3 bucket name in the code and to provide the rele
 </br>
 
 
-# Using windows_exporter to get more metrics
+## Using windows_exporter to get more Metrics
 
 Like explained before, cloudwatch agent provides limited metrics and perheps those are not sufficient as per your reuqirement. 
 
@@ -127,7 +127,7 @@ Now these metrics can be shared with prometheus and other destinations. For this
 
 </br>
 
-## sharing the metrics with cloudwatch
+### Sharing the metrics with cloudwatch
 
 
 Now, Though cloudwatch agent also supports the prometheus metrics now but I did not find any helpful resource to make this work.
@@ -167,4 +167,18 @@ Now its time to create the lambda function to generate the report.
 - I have used one IAM role for this lambda function that has default cloudwatch permissions and EC2, S3 permissions to describe the server and upload the file to s3 bucket.
 
 TODO: Create the IAM role its permission as a part of terraform code itself. 
+
+
+# Next Scope
+
+- Try to integrate windows_exporter with cloudwatch agent directly.
+- Try the same config for a linux virtual machine as well.
+
+
+# Reference
+
+- https://github.com/prometheus-community/windows_exporter
+- https://github.com/cloudposse/prometheus-to-cloudwatch
+- AWS Official document for aws agent installation
+
 
