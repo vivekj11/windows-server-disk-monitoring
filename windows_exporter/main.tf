@@ -13,7 +13,7 @@ resource "aws_lambda_function" "disk_lambda" {
 
   environment {
     variables = {
-      bucket_name = "<bucket-name>"
+      bucket_name = "<buckcet-name>"
     }
   }
 }
